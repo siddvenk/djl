@@ -46,13 +46,17 @@ public final class TarUtils {
         }
         bis = CloseShieldInputStream.wrap(bis);
         try (TarArchiveInputStream tis = new TarArchiveInputStream(bis)) {
+            System.out.println("Using destination path: " + dir.toAbsolutePath());
             TarArchiveEntry entry;
             while ((entry = tis.getNextEntry()) != null) {
+                System.out.println("Entry name before sanitize is: " + entry.getName());
                 String entryName = ZipUtils.removeLeadingFileSeparator(entry.getName());
+                System.out.println("Entry name after sanitize is: " + entryName);
                 if (entryName.contains("..")) {
                     throw new IOException("Malicious zip entry: " + entryName);
                 }
                 Path file = dir.resolve(entryName).toAbsolutePath();
+                System.out.println("File path to write to: " + file.toAbsolutePath());
                 if (entry.isDirectory()) {
                     Files.createDirectories(file);
                 } else {

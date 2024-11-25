@@ -12,6 +12,8 @@
  */
 package ai.djl.util;
 
+import ai.djl.testing.TestRequirements;
+
 import org.apache.commons.compress.archivers.zip.Zip64Mode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
@@ -56,6 +58,19 @@ public class ZipUtilsTest {
             TarUtils.untar(is, output, false);
         }
         Assert.assertTrue(Files.exists(file));
+    }
+
+    @Test
+    public void testLinuxCreatedWindowsUsedOffendingTar() throws IOException {
+        TestRequirements.windows();
+        Path tarPath = Paths.get("src/test/resources/linux-create-windows-use.tar");
+        Path output = Paths.get("C:/out");
+        Path expectedFile = output.resolve("Windows/System32/drivers/etc/dummy.txt");
+        Utils.deleteQuietly(expectedFile);
+        try (InputStream is = Files.newInputStream(tarPath)) {
+            TarUtils.untar(is, output, false);
+        }
+        Assert.assertTrue(Files.exists(expectedFile));
     }
 
     @Test

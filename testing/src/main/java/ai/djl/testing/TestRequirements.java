@@ -96,6 +96,13 @@ public final class TestRequirements {
         }
     }
 
+    /** Requires that the test runs on windows, not OSX or linux. */
+    public static void windows() {
+        if (!System.getProperty("os.name").toLowerCase().startsWith("win")) {
+            throw new SkipException("This test requires windows");
+        }
+    }
+
     /** Requires that the test runs on x86_64 arch. */
     public static void notArm() {
         if ("aarch64".equals(System.getProperty("os.arch"))) {
