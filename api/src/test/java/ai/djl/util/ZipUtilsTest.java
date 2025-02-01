@@ -46,6 +46,16 @@ public class ZipUtilsTest {
     }
 
     @Test
+    public void testSymbolicZipFile() throws IOException {
+        Path output = Paths.get("build/output");
+        Files.createDirectories(output);
+        Path offendindZip = Paths.get("src/test/resources/symbolic_zip.zip");
+        try (InputStream is = Files.newInputStream(offendindZip)) {
+            ZipUtils.unzip(is, output.toAbsolutePath());
+        }
+    }
+
+    @Test
     public void testOffendingTar() throws IOException {
         String[] offendingTars =
                 new String[] {

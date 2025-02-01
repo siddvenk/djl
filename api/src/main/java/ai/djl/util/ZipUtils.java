@@ -53,9 +53,11 @@ public final class ZipUtils {
         Set<String> set = new HashSet<>();
         while ((entry = zis.getNextEntry()) != null) {
             String entryName = entry.getName();
+            System.out.println("validating entry: " + entryName);
             validateArchiveEntry(entry.getName(), dest);
             set.add(entryName);
             Path file = dest.resolve(entryName).toAbsolutePath();
+            System.out.println("writing file " + file);
             if (entry.isDirectory()) {
                 Files.createDirectories(file);
             } else {
@@ -124,6 +126,9 @@ public final class ZipUtils {
             throw new IOException("Invalid archive entry, contains traversal elements: " + name);
         }
         Path expectedOutputPath = destination.resolve(name).toAbsolutePath().normalize();
+        System.out.println("Provided destination absolute path: " + destination.normalize());
+        System.out.println("Path that will be written: " + expectedOutputPath);
+        System.out.println("archive entry " + name + " writing to " + expectedOutputPath + " is symlink " + Files.isSymbolicLink(expectedOutputPath));
         if (!expectedOutputPath.startsWith(destination.normalize())) {
             throw new IOException(
                     "Bad archive entry "

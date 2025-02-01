@@ -57,6 +57,9 @@ public abstract class AbstractRepository implements Repository {
         this.name = name;
         this.uri = uri;
         arguments = parseQueryString(uri);
+        System.out.println("name is " + name);
+        System.out.println("uri is " + uri);
+        System.out.println("arguments is " + arguments);
     }
 
     /** {@inheritDoc} */
@@ -182,11 +185,13 @@ public abstract class AbstractRepository implements Repository {
     protected void download(Path tmp, URI baseUri, Artifact.Item item, Progress progress)
             throws IOException {
         URI fileUri = URI.create(item.getUri());
+        System.out.println("uri is " + fileUri);
         if (!fileUri.isAbsolute()) {
             fileUri = getBaseUri().resolve(baseUri).resolve(fileUri);
         }
+        System.out.println("fileUri is " + fileUri);
 
-        logger.debug("Downloading artifact: {} ...", fileUri);
+        logger.debug("Downloading artifact: {} to {} ...", fileUri, tmp);
         try (InputStream is = new BufferedInputStream(fileUri.toURL().openStream())) {
             save(is, tmp, item, progress);
         }
@@ -194,6 +199,7 @@ public abstract class AbstractRepository implements Repository {
 
     protected void save(InputStream is, Path tmp, Artifact.Item item, Progress progress)
             throws IOException {
+        System.out.println("saving archive to " + tmp);
         ProgressInputStream pis = new ProgressInputStream(is, progress);
         String fileName = item.getName();
         String extension = item.getExtension();

@@ -49,6 +49,7 @@ public final class TarUtils {
             TarArchiveEntry entry;
             while ((entry = tis.getNextEntry()) != null) {
                 String entryName = entry.getName();
+                System.out.println("entry name is " + entryName);
                 ZipUtils.validateArchiveEntry(entryName, dir);
                 Path file = dir.resolve(entryName).toAbsolutePath();
                 if (entry.isDirectory()) {

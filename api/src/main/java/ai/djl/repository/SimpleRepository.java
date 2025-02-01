@@ -76,6 +76,10 @@ public class SimpleRepository extends AbstractRepository {
         if (modelName == null) {
             modelName = artifactId;
         }
+        System.out.println("path is " + path);
+        System.out.println("modelName is " + modelName);
+        System.out.println("artifactId is " + artifactId);
+        System.out.println("isRemote is " + isRemote);
     }
 
     /** {@inheritDoc} */
@@ -119,7 +123,7 @@ public class SimpleRepository extends AbstractRepository {
     @Override
     protected void download(Path tmp, URI baseUri, Artifact.Item item, Progress progress)
             throws IOException {
-        logger.debug("Extracting artifact: {} ...", path);
+        logger.debug("Extracting artifact: {} to {} ...", path.toAbsolutePath(), tmp.toAbsolutePath());
         try (InputStream is = new BufferedInputStream(Files.newInputStream(path))) {
             save(is, tmp, item, progress);
         }
